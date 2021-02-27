@@ -59,7 +59,7 @@ public class MovieDataReader implements MovieDataReaderInterface {
 //    try {
 //      mdr.readDataSet(new FileReader(path));
 //    } catch (Exception e) {
-//      System.out.println("asdasd");
+//      System.out.println("Error found!");
 //    }
 //  }
 

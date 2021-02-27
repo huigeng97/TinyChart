@@ -14,6 +14,7 @@ public class Movie implements MovieInterface {
     this.title = title;
     this.year = Integer.parseInt(year);
     this.director = director;
+    description = description.replace("\"", "");
     this.description = description;
     genres = genres.replace("\"", "");
     String[] gen = genres.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
@@ -22,6 +23,16 @@ public class Movie implements MovieInterface {
       this.genres.add(gen[i]);
     }
     this.avgVote = Float.parseFloat(avgVote);
+  }
+  
+  public String toString() {
+    String ret = "";
+    ret += "\"" + title + "\", " + "\"" + year + "\", " + "\"" + director + "\", " + "\"" + description + "\", ";
+    for (int i = 0; i < genres.size(); i++) {
+      ret += "\"" + genres.get(i) + "\", ";
+    }
+    ret += "\"" + avgVote + "\"";
+    return ret;
   }
   
   @Override
