@@ -14,12 +14,13 @@ public class MovieDataReader implements MovieDataReaderInterface {
     List<MovieInterface> movies = new ArrayList<MovieInterface>();
     int count = 0;
     int titleInd = -1, yearInd = -1, directorInd = -1, descriptInd = -1, genresInd = -1,
-        voteInd = -1;
+        voteInd = -1, headerLength = -1;
     String line = "";
     BufferedReader br = new BufferedReader(inputFileReader);
     while ((line = br.readLine()) != null) {
       if (count == 0) {
         String[] values = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        headerLength = values.length;
         for (int i = 0; i < values.length; i++) {
           if (values[i].equals("title")) {
             titleInd = i;
@@ -42,7 +43,7 @@ public class MovieDataReader implements MovieDataReaderInterface {
       }
       if (count > 0) {
         String[] values = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-        if (values.length != 13)
+        if (values.length != headerLength)
           throw new DataFormatException();
         movies.add(new Movie(values[titleInd], values[yearInd], values[directorInd],
             values[descriptInd], values[genresInd], values[voteInd]));
