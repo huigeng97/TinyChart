@@ -11,8 +11,10 @@ public class Movie implements MovieInterface {
   private float avgVote;
   
   public Movie (String title, String year, String director, String description, String genres, String avgVote) {
+    
     this.title = title;
     this.year = Integer.parseInt(year);
+    director = director.replace("\"", "");
     this.director = director;
     description = description.replace("\"", "");
     this.description = description;
