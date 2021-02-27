@@ -27,11 +27,14 @@ public class Movie implements MovieInterface {
   
   public String toString() {
     String ret = "";
-    ret += "\"" + title + "\", " + "\"" + year + "\", " + "\"" + director + "\", " + "\"" + description + "\", ";
+    ret += "Title: \"" + title + "\", Genre: \"";
     for (int i = 0; i < genres.size(); i++) {
-      ret += "\"" + genres.get(i) + "\", ";
+      if (i == genres.size()-1)
+        ret += genres.get(i);
+      else
+        ret += genres.get(i) + ", ";
     }
-    ret += "\"" + avgVote + "\"";
+    ret += "\", Vote: " + avgVote + ", Year: " + year + ", Director(s): \"" + director + "\", Description: \"" + description + "\"";
     return ret;
   }
   
