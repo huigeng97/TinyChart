@@ -49,7 +49,7 @@ public class MovieDataReader implements MovieDataReaderInterface {
       }
       count++;
     }
-    return null;
+    return movies;
   }
 
 //  public static void main(String[] args) {
