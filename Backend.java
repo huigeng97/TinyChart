@@ -452,11 +452,6 @@ public class Backend implements BackendInterface {
     for (int i = startingIndex; i < startingIndex + 3 && i < movies.size(); i++) {
       threeMovies.add(movies.get(i));
     }
-    
     return threeMovies;
-  }
-
-  public List<MovieInterface> seeMovies(){
-    return movies;
   }
 }
