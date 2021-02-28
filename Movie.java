@@ -11,9 +11,12 @@ public class Movie implements MovieInterface {
   private float avgVote;
   
   public Movie (String title, String year, String director, String description, String genres, String avgVote) {
+    
     this.title = title;
     this.year = Integer.parseInt(year);
+    director = director.replace("\"", "");
     this.director = director;
+    description = description.replace("\"", "");
     this.description = description;
     genres = genres.replace("\"", "");
     String[] gen = genres.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
@@ -22,6 +25,19 @@ public class Movie implements MovieInterface {
       this.genres.add(gen[i]);
     }
     this.avgVote = Float.parseFloat(avgVote);
+  }
+  
+  public String toString() {
+    String ret = "";
+    ret += "Title: \"" + title + "\", Genre: \"";
+    for (int i = 0; i < genres.size(); i++) {
+      if (i == genres.size()-1)
+        ret += genres.get(i);
+      else
+        ret += genres.get(i) + ", ";
+    }
+    ret += "\", Vote: " + avgVote + ", Year: " + year + ", Director(s): \"" + director + "\", Description: \"" + description + "\"";
+    return ret;
   }
   
   @Override
