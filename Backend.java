@@ -81,8 +81,8 @@ public class Backend implements BackendInterface {
    * then store the list of movies that the MovieDataReaderInterface provides.
    * 
    * @param args Can be the movie data file path or raw movie data. If it's
-   * the movie data file path, args should be FileReader(filePath), otherwise
-   * if should be StringReader(rawData).
+   * the movie data file path, args should be `new FileReader(filePath)`, 
+   * otherwise it should be `new StringReader(rawData)`.
    */
   public Backend(Reader args) {
     this.capacity = 100;
