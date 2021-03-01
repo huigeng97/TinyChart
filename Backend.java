@@ -1,3 +1,5 @@
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -73,6 +75,7 @@ public class Backend implements BackendInterface {
    * 
    * @param args the path of the data file with movie info
    */
+
   public Backend(String args) {
     this.capacity = 100;
     this.genreList = new LinkedNode[capacity];
@@ -87,6 +90,8 @@ public class Backend implements BackendInterface {
     // instantiates the Data Wrangler’s implementation
     MovieDataReader mdr = new MovieDataReader();
     try {
+
+
       // read in the movie info
       data = mdr.readDataSet(new FileReader(args));
     } catch (IOException | DataFormatException e) {
@@ -264,10 +269,10 @@ public class Backend implements BackendInterface {
    * @param o a movie
    * @return 0
    */
-  @Override
-  public int compareTo(MovieInterface o) {
-    return 0;
-  }
+//  @Override
+//  public int compareTo(MovieInterface o) {
+//    return 0;
+//  }
 
   /**
    * A helper method that produces the index in the hash table for keys
@@ -345,7 +350,7 @@ public class Backend implements BackendInterface {
   /**
    * Removes another average rating to select movies by
    * 
-   * @param genre the string for the average rating removed in the data set
+   * @param rating the string for the average rating removed in the data set
    */
   @Override
   public void removeAvgRating(String rating) {

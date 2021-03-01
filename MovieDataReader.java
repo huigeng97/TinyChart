@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -9,7 +6,7 @@ import java.util.zip.DataFormatException;
 public class MovieDataReader implements MovieDataReaderInterface {
 
   @Override
-  public List<MovieInterface> readDataSet(FileReader inputFileReader)
+  public List<MovieInterface> readDataSet(Reader inputFileReader)
       throws FileNotFoundException, IOException, DataFormatException {
     List<MovieInterface> movies = new ArrayList<MovieInterface>();
     int count = 0;
