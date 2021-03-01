@@ -74,11 +74,11 @@ public class Movie implements MovieInterface {
   @Override
   public int compareTo(MovieInterface otherMovie) {
     if (avgVote-otherMovie.getAvgVote()>0)
-      return 1;
+      return -1;
     else if (avgVote-otherMovie.getAvgVote()==0)
       return 0;
     else
-      return -1;
+      return 1;
   }
 
 }
