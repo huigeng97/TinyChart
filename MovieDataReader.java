@@ -47,20 +47,21 @@ public class MovieDataReader implements MovieDataReaderInterface {
           throw new DataFormatException();
         movies.add(new Movie(values[titleInd], values[yearInd], values[directorInd],
             values[descriptInd], values[genresInd], values[voteInd]));
+        System.out.println(movies.get(count-1));
       }
       count++;
     }
     return movies;
   }
 
-//  public static void main(String[] args) {
-//    String path = "\\Users\\sudhi\\Downloads\\movies.csv";
-//    MovieDataReader mdr = new MovieDataReader();
-//    try {
-//      mdr.readDataSet(new FileReader(path));
-//    } catch (Exception e) {
-//      System.out.println("Error found!");
-//    }
-//  }
+  public static void main(String[] args) {
+    String path = "\\Users\\sudhi\\Downloads\\movies.csv";
+    MovieDataReader mdr = new MovieDataReader();
+    try {
+      mdr.readDataSet(new FileReader(path));
+    } catch (Exception e) {
+      System.out.println("Error found!");
+    }
+  }
 
 }
