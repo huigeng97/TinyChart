@@ -28,8 +28,11 @@ public class Frontend {
 		}//beings selected & unselected genres 
 		if (selectedRatings==null) {
 			selectedRatings=  new String [11];
-			for (int i=0; i<11; i++)
-				selectedRatings[i]="UNSELECTED";
+			for (int i=0; i<11; i++) {
+				selectedRatings[i]="SELECTED";
+				backend.addAvgRating(i+"");
+			}
+			
 		}//beings selected & unselected rankings 
 		String userInput="";
 		//welcome message
@@ -84,29 +87,26 @@ public class Frontend {
 				+ "then return to base mode by typing \"x\". ");
 		System.out.println("If multiple genres are selected only movies that are in both genres will"
 				+ "be shown."+
-				"To select a genre type \"s\" followed by the number next to the name of the wanted genre."+
-				"To unselect a genre type \"u\" followed by number next to the name of the wanted genre."+
-				"For example if you wanted to select the first genre you would type \"s1\". The genres are listed below:");
+				"The genres are listed below:");
 		while (!userInput.equals("x")) {
 			printGenres(arr, genreList);//prints current list of selected and unselected
 			//loop instructions 
-			System.out.println("Enter \"s\" or \"u\" followed by the number of genre you would like to select or unselect or \"x\" to exit.");
+			System.out.println("Enter the number of the genre you would like to select or unselect or \"x\" to exit.");
 			userInput=sc.next();
 			if (userInput.equals("x"))
 				return arr;
-			char firstLetter=userInput.charAt(0);//breaks into select or unselect
-			int genre=turnStringToInt(userInput.substring(1));//breaks into what genre 
-			if ((firstLetter!='s'&&firstLetter!='u')||genre<1||genre>genreList.size()) {//checks valid input
+			int genre=turnStringToInt(userInput);//breaks into what genre 
+			if (genre<1||genre>genreList.size()) {//checks valid input
 				System.out.println("Invalid Input");
 				continue;
 			}
-			if(firstLetter=='s') {//selects genre
-				arr[genre-1]="SELECTED";
-				backend.addGenre(genreList.get(genre-1));
-			}
-			if(firstLetter=='u') {//unselects genre
+			if(arr[genre-1].equals("SELECTED")) {//selects genre
 				arr[genre-1]="UNSELECTED";
 				backend.removeGenre(genreList.get(genre-1));
+			}
+			else if(arr[genre-1].equals("UNSELECTED")) {//unselects genre
+				arr[genre-1]="SELECTED";
+				backend.addGenre(genreList.get(genre-1));
 			}
 		}
 		return null;//should never get here
@@ -123,29 +123,25 @@ public class Frontend {
 		System.out.println("Welcome to MovieMapper Ratings Mode. You may select or unselect ratings "
 				+ "then return to base mode by typing \"x\". ");
 		System.out.println("If multiple ratings are selected if a movie has any of the selected ratings it will be shown."+
-				"To select a rating type \"s\" followed by the wanted rating."+
-				"To unselect a rating type \"u\" followed by the wanted rating."+
-				"For example if you wanted to select the movies of a rating between one and two you would enter \"s1\". "
-				+ "The ratings selection is below:");
+				"The ratings selection is below:");
 		while (!userInput.equals("x")) {
 			printRatings(givenArr);
-			System.out.println("Enter \"s\" or \"u\" followed by the rating you would like to select or unselect or \"x\" to exit.");
+			System.out.println("Enter the rating you would like to select or unselect or \"x\" to exit.");
 			userInput=sc.next();
 			if (userInput.equals("x"))
 				return arr;
-			char firstLetter=userInput.charAt(0);//breaks into s or d 
-			int rating=turnStringToInt(userInput.substring(1));//breaks into what specific rating
-			if ((firstLetter!='s'&&firstLetter!='u')||rating<0||rating>10) {//check input validity
+			int rating=turnStringToInt(userInput);//breaks into what specific rating
+			if (rating<0||rating>10) {//check input validity
 				System.out.println("Invalid Input");
 				continue;
 			}
-			if(firstLetter=='s') {//selected option
-				arr[rating]="SELECTED";
-				backend.addAvgRating(userInput.substring(1));
-			}
-			if(firstLetter=='u') {//unselected option
+			if(arr[rating].equals("SELECTED")) {//selects genre
 				arr[rating]="UNSELECTED";
-				backend.removeAvgRating(userInput.substring(1));
+				backend.removeAvgRating((rating)+"");
+			}
+			else if(arr[rating].equals("UNSELECTED")) {//unselects genre
+				arr[rating]="SELECTED";
+				backend.addAvgRating((rating)+"");
 			}
 		}
 		return null;
@@ -159,6 +155,7 @@ public class Frontend {
 			return;
 		this.backend=backend;
 		runBaseMode();
+		System.out.println("Thank you for using MovieMapper!");
 		return;
 	}
 
