@@ -1,9 +1,17 @@
+// --== CS400 File Header Information ==--
+// Name: Edward Zhao
+// Email: edward.zhao@wisc.edu
+// Team: GE red
+// Role: Backend developer
+// TA: Surabhi
+// Lecturer: Gary
+// Notes to Grader: <optional extra notes>
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.Reader;
 
 /**
  * Class to represent nodes in the hash table
@@ -74,7 +82,7 @@ public class Backend implements BackendInterface {
    * 
    * @param args the path of the data file with movie info
    */
-  public Backend(String args) {
+  public Backend(Reader args) {
     this.capacity = 100;
     this.genreList = new LinkedNode[capacity];
     this.ratingList = new LinkedNode[20];
@@ -86,10 +94,15 @@ public class Backend implements BackendInterface {
     List<MovieInterface> data = null; // all the movies
 
     // instantiates the Data Wrangler’s implementation
-    MovieDataReader mdr = new MovieDataReader();
+    MovieDataReaderInterface mdr = new MovieDataReader();
+
     try {
-      // read in the movie info
-      data = mdr.readDataSet(new FileReader(args));
+      // if the input is a String containing movie info
+      if (args.getClass().toString().equals("class java.io.StringReader")) {
+        data = mdr.readDataSet(args);
+      } else { // if the input isn't a String (but a file)
+        data = mdr.readDataSet(args);
+      }
     } catch (IOException | DataFormatException e) {
       e.printStackTrace();
     }
@@ -189,147 +202,10 @@ public class Backend implements BackendInterface {
         }
       }
     }
-    
-    for (int i = 0; i < ratingList.length; i++) {
-      if (ratingList[i] != null) {
-        LinkedNode currNode = ratingList[i];
-        while (currNode != null) {
-          movies.add(currNode.movie);
-          currNode = currNode.next;
-        }
-      }
-    }
   }
 
-  
-  
-//  
-//  public Backend(StringReader args) {
-//    this.capacity = 100;
-//    this.genreList = new LinkedNode[capacity];
-//    this.ratingList = new LinkedNode[20];
-//    this.currGenre = new ArrayList<String>();
-//    this.currRating = new ArrayList<String>();
-//    this.movies = new ArrayList<MovieInterface>();
-//
-//    int index;
-//    List<MovieInterface> data = null; // all the movies
-//
-//    // instantiates the Data Wrangler’s implementation
-//    MovieDataReader mdr = new MovieDataReader();
-//    try {
-//      // read in the movie info
-//      data = mdr.readDataSet(new StringReader(args));
-//    } catch (IOException | DataFormatException e) {
-//      e.printStackTrace();
-//    }
-//
-//    // traverse every movie in the data set
-//    for (int i = 0; i < data.size(); i++) {
-//      // map genres to the movie
-//      for (int j = 0; j < data.get(i).getGenres().size(); j++) {
-//        // implements hash function to find index of a key
-//        index = hashIndexHelper(data.get(i).getGenres().get(j), capacity);
-//        // current node
-//        LinkedNode currNode = genreList[index];
-//
-//        // create a new node if empty
-//        if (currNode == null) {
-//          // check if rating is 10
-//          if (data.get(i).getAvgVote() != 10.0) {
-//            currNode = new LinkedNode(
-//                data.get(i).getGenres().get(j), 
-//                data.get(i).getAvgVote().toString().substring(0, 1), 
-//                data.get(i));
-//          } else { // if the rating is 10
-//            currNode = new LinkedNode(
-//                data.get(i).getGenres().get(j), 
-//                "10", 
-//                data.get(i));
-//          }
-//          genreList[index] = currNode;
-//          size += 1;
-//          if (1.0 * size / capacity > 0.9) {
-//            resizeHelper();
-//          }
-//        } else { // add a new node at the end if not empty
-//          while(currNode.next != null) { // loop till the end
-//            currNode = currNode.next;
-//          }
-//          if (data.get(i).getAvgVote() != 10.0) {
-//            currNode.next = new LinkedNode(
-//                data.get(i).getGenres().get(j), 
-//                data.get(i).getAvgVote().toString().substring(0, 1), 
-//                data.get(i)); // add a new node at the end
-//          } else { // if rating is 10
-//            currNode.next = new LinkedNode(
-//                data.get(i).getGenres().get(j), 
-//                "10", 
-//                data.get(i));
-//          }
-//          size += 1;
-//          // check if need resize
-//          if (1.0 * size / capacity > 0.9) {
-//            resizeHelper();
-//          }
-//        }
-//      }
-//
-//      // map ratings to the movie
-//      // implements hash function to find index of a key
-//      if (data.get(i).getAvgVote() == 10.0) { // if the rating is 10.0
-//        index = "10".hashCode() % 20; // get hash code for "10" 
-//      } else { // if the rating is not 10.0
-//        // get hash code for the digits
-//        index = data.get(i).getAvgVote().toString().substring(0, 1).hashCode() % 20;
-//      }
-//      // current node
-//      LinkedNode currNode = ratingList[index];
-//
-//      // create a new node if empty
-//      if (currNode == null) {
-//        // if rating is not 10
-//        if (data.get(i).getAvgVote() != 10.0) {
-//          currNode = new LinkedNode(
-//              data.get(i).getGenres(),
-//              data.get(i).getAvgVote().toString().substring(0, 1),
-//              data.get(i));
-//        } else { // if rating is 10
-//          currNode = new LinkedNode(
-//              data.get(i).getGenres(),
-//              "10",
-//              data.get(i));
-//        }
-//        ratingList[index] = currNode;
-//      } else { // if not empty
-//        while (currNode.next != null) { // loop till the end
-//          currNode = currNode.next;
-//        }
-//        // if rating is not 10
-//        if (data.get(i).getAvgVote() != 10.0) {
-//          currNode.next = new LinkedNode(
-//              data.get(i).getGenres(), 
-//              data.get(i).getAvgVote().toString().substring(0, 1), 
-//              data.get(i)); // add a new node at the end
-//        } else { // if rating is 10
-//          currNode.next = new LinkedNode(
-//              data.get(i).getGenres(), 
-//              "10", 
-//              data.get(i));
-//        }
-//      }
-//    }
-//  }
-//  
-  
-  
-  
-  
-  
-  
-  
   /**
-   * A helper method that resizes and rehashes the genreList when the 
+   * A helper method that resizes and rehashes the genre hash table when the 
    * data takes up 90% above of capacity
    */
   private void resizeHelper() {
@@ -356,17 +232,26 @@ public class Backend implements BackendInterface {
     int index = 0; // index of rating hash table
     movies = new ArrayList<MovieInterface>(); // reset movies
 
-    if (currRating.size() == 0) { // if no rating filter
-      // loop through rating hash table
-      for (int i = 0; i < ratingList.length; i++) {
-        // current node
-        LinkedNode currNode = ratingList[i];
-        while (currNode != null) { // loop through the chain
-          // check genre requirements
-          if (currNode.genreSet.containsAll(currGenre)) {
-            movies.add(currNode.movie); // add movie
+    if (currRating.size() == 0) { // if genre filter only
+      for (int i = 0; i < currGenre.size(); i++) { // traverse selected genres
+        index = hashIndexHelper(currGenre.get(i), capacity); // implement hash function
+        LinkedNode currNode = genreList[index]; // current node
+
+        if (movies.size() == 0) { // if first genre
+          while (currNode != null) { // traverse the chain
+            movies.add(currNode.movie); // add each movie on the chain
+            currNode = currNode.next;
           }
-          currNode = currNode.next;
+        } else { // if not first genre
+          // ArrayList used to save movies that fulfill all the genres
+          List<MovieInterface> temp = new ArrayList<MovieInterface>();
+          while (currNode != null) { // traverse the chain
+            if (movies.contains(currNode.movie)) { // if fulfill all the genres
+              temp.add(currNode.movie); // add movie
+            }
+            currNode = currNode.next;
+          }
+          movies = temp; // renew with movies that fulfill all the genres
         }
       }
     } else { // if there is rating filter
@@ -383,6 +268,7 @@ public class Backend implements BackendInterface {
         while (currNode != null) { // loop through the chain
           if (currNode.genreSet.containsAll(currGenre)) { // fulfills genre requirements
             for (int j = 0; j < currRating.size(); j++) { // traverse rating requirements
+              // if fulfills rating requirement
               if ((currRating.get(j).contains("10") && currNode.rating.equals("10"))
                   || (currRating.get(j).substring(0, 1).equals(currNode.rating))) {
                 movies.add(currNode.movie); // add movie
@@ -419,15 +305,8 @@ public class Backend implements BackendInterface {
    */
   @Override
   public void addGenre(String genre) {
-    // check if the genre exists
-    if (getAllGenres().contains(genre)) {
-      currGenre.add(genre); // add a genre filter
-      movieSelect(); // select movies
-    } else if (genre == null) { // used to debug
-      System.out.println("The genre is invalid (null).");
-    } else { // error info for users' reference
-      System.out.println("The genre " + genre + " doesn't exist.");
-    }
+    currGenre.add(genre); // add a genre filter
+    movieSelect(); // select movies
   }
 
   /**
@@ -438,23 +317,7 @@ public class Backend implements BackendInterface {
    */
   @Override
   public void addAvgRating(String rating) {
-    // check if rating valid
-    if ((rating.contains(".")
-        && rating.subSequence(0, rating.indexOf(".")).length() > 1
-        && !rating.substring(0, rating.indexOf(".")).equals("10"))
-        || (rating.contains(".")
-            && rating.substring(0, rating.indexOf(".")).equals("10")
-            && rating.substring(rating.indexOf(".")+1).compareTo("00") > 0)
-        || (!rating.contains(".") && rating.length() > 1 && !rating.equals("10"))
-        || rating.compareTo("0") < 0
-        || rating == null) {
-      // error info for users' reference
-      System.out.println("This rating " + rating + " is invalid. " 
-          + "Please select a number between 0 and 10.");
-    } else { // if rating is valid
-      // add a rating filter
-      currRating.add(rating);
-    }
+    currRating.add(rating); // add a rating filter
     movieSelect(); // select movies
   }
 
@@ -511,7 +374,6 @@ public class Backend implements BackendInterface {
       currRating.remove("10");
       currRating.add("10");
     }
-    
     return currRating;
   }
 
@@ -544,7 +406,7 @@ public class Backend implements BackendInterface {
     }
     return genres;
   }
-  
+
   /**
    * Gets a list of three movies starting at (and including) the movie at 
    * the startingIndex of the resulting set ordered by average movie rating 
@@ -556,16 +418,12 @@ public class Backend implements BackendInterface {
    */
   @Override
   public List<MovieInterface> getThreeMovies(int startingIndex) {
-//    if (startingIndex < 0 || startingIndex > movies.size()-1) {
-//      System.out.println("Index out of range. Please select a number between "
-//          + "0 and " + (movies.size()-1) + ".");
-//      return null;
-//    }
-    
-    // top three movies starting the startingIndex
-    List<MovieInterface> threeMovies = new ArrayList<MovieInterface>();
+    // check if startingIndex valid
+    if (startingIndex < 0 || startingIndex > movies.size()-1) {
+      return null;
+    }
 
-    // insert sort
+    // sort the result set in descending order
     for (int i = 1; i < movies.size(); i++) {
       MovieInterface temp = movies.get(i);
       int j = i - 1;
@@ -575,6 +433,8 @@ public class Backend implements BackendInterface {
       movies.set(j+1, temp);
     }
 
+    // top three movies starting from the startingIndex
+    List<MovieInterface> threeMovies = new ArrayList<MovieInterface>();
     // get three movies starting from startingIndex
     for (int i = startingIndex; i < startingIndex + 3 && i < movies.size(); i++) {
       threeMovies.add(movies.get(i));
