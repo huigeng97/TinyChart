@@ -22,6 +22,7 @@ public class Movie implements MovieInterface {
     String[] gen = genres.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
     this.genres = new ArrayList<String>();
     for (int i = 0; i < gen.length; i++) {
+      gen[i] = gen[i].replace(" ", "");
       this.genres.add(gen[i]);
     }
     this.avgVote = Float.parseFloat(avgVote);

@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -9,7 +10,7 @@ import java.util.zip.DataFormatException;
 public class MovieDataReader implements MovieDataReaderInterface {
 
   @Override
-  public List<MovieInterface> readDataSet(FileReader inputFileReader)
+  public List<MovieInterface> readDataSet(Reader inputFileReader)
       throws FileNotFoundException, IOException, DataFormatException {
     List<MovieInterface> movies = new ArrayList<MovieInterface>();
     int count = 0;
@@ -47,21 +48,21 @@ public class MovieDataReader implements MovieDataReaderInterface {
           throw new DataFormatException();
         movies.add(new Movie(values[titleInd], values[yearInd], values[directorInd],
             values[descriptInd], values[genresInd], values[voteInd]));
-        System.out.println(movies.get(count-1));
+        //System.out.println(movies.get(count-1));
       }
       count++;
     }
     return movies;
   }
-
-  public static void main(String[] args) {
-    String path = "\\Users\\sudhi\\Downloads\\movies.csv";
-    MovieDataReader mdr = new MovieDataReader();
-    try {
-      mdr.readDataSet(new FileReader(path));
-    } catch (Exception e) {
-      System.out.println("Error found!");
-    }
-  }
+//
+//  public static void main(String[] args) {
+//    String path = "\\Users\\sudhi\\Downloads\\movies.csv";
+//    MovieDataReader mdr = new MovieDataReader();
+//    try {
+//      mdr.readDataSet(new FileReader(path));
+//    } catch (Exception e) {
+//      System.out.println("Error found!");
+//    }
+//  }
 
 }
