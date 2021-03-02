@@ -229,58 +229,34 @@ public class Backend implements BackendInterface {
     int index = 0; // index of rating hash table
     movies = new ArrayList<MovieInterface>(); // reset movies
 
-//    if (currRating.size() == 0) { // if genre filter only
-//      for (int i = 0; i < currGenre.size(); i++) { // traverse selected genres
-//        index = hashIndexHelper(currGenre.get(i), capacity); // implement hash function
-//        LinkedNode currNode = genreList[index]; // current node
-//
-//        if (movies.size() == 0) { // if first genre
-//          while (currNode != null) { // traverse the chain
-//            movies.add(currNode.movie); // add each movie on the chain
-//            currNode = currNode.next;
-//          }
-//        } else { // if not first genre
-//          // ArrayList used to save movies that fulfill all the genres
-//          List<MovieInterface> temp = new ArrayList<MovieInterface>();
-//          while (currNode != null) { // traverse the chain
-//            if (movies.contains(currNode.movie)) { // if fulfill all the genres
-//              temp.add(currNode.movie); // add movie
-//            }
-//            currNode = currNode.next;
-//          }
-//          movies = temp; // renew with movies that fulfill all the genres
-//        }
-//      }
-//    } else { // if there is rating filter 
-      // loop through rating hash table
-      for (int i = 0; i < currRating.size(); i++) {
-        // implement hash function to find index of rating
-        if (currRating.get(i).contains("10")) {
-          index = hashIndexHelper("10", 20);
-        } else {
-          index = hashIndexHelper(currRating.get(i).substring(0, 1), 20);
-        }
-        // current node
-        LinkedNode currNode = ratingList[index];
-        while (currNode != null) { // loop through the chain
-          if (currNode.genreSet.containsAll(currGenre)) { // fulfills genre requirements
-            for (int j = 0; j < currRating.size(); j++) { // traverse rating requirements
-              // if fulfills rating requirement
-              if ((currRating.get(j).contains("10") && currNode.rating.equals("10"))
-                  || (currRating.get(j).substring(0, 1).equals(currNode.rating))) {
-                movies.add(currNode.movie); // add movie
-                break;
-              }
+    // loop through rating hash table
+    for (int i = 0; i < currRating.size(); i++) {
+      // implement hash function to find index of rating
+      if (currRating.get(i).contains("10")) {
+        index = hashIndexHelper("10", 20);
+      } else {
+        index = hashIndexHelper(currRating.get(i).substring(0, 1), 20);
+      }
+      // current node
+      LinkedNode currNode = ratingList[index];
+      while (currNode != null) { // loop through the chain
+        if (currNode.genreSet.containsAll(currGenre)) { // fulfills genre requirements
+          for (int j = 0; j < currRating.size(); j++) { // traverse rating requirements
+            // if fulfills rating requirement
+            if ((currRating.get(j).contains("10") && currNode.rating.equals("10"))
+                || (currRating.get(j).substring(0, 1).equals(currNode.rating))) {
+              movies.add(currNode.movie); // add movie
+              break;
             }
           }
-          currNode = currNode.next;
         }
-      }
-      if (currGenre.size() == 0) {
-        movies = new ArrayList<MovieInterface>();
+        currNode = currNode.next;
       }
     }
-//  }
+    if (currGenre.size() == 0) {
+      movies = new ArrayList<MovieInterface>();
+    }
+  }
 
   /**
    * A helper method that produces the index in the hash table for keys
@@ -306,7 +282,6 @@ public class Backend implements BackendInterface {
   @Override
   public void addGenre(String genre) {
     currGenre.add(genre); // add a genre filter
-    movieSelect(); // select movies
   }
 
   /**
@@ -318,7 +293,6 @@ public class Backend implements BackendInterface {
   @Override
   public void addAvgRating(String rating) {
     currRating.add(rating); // add a rating filter
-    movieSelect(); // select movies
   }
 
   /**
@@ -329,7 +303,6 @@ public class Backend implements BackendInterface {
   @Override
   public void removeGenre(String genre) {
     currGenre.remove(genre); // remove a genre filter
-    movieSelect(); // select movies
   }
 
   /**
@@ -340,7 +313,6 @@ public class Backend implements BackendInterface {
   @Override
   public void removeAvgRating(String rating) {
     currRating.remove(rating); // remove a rating
-    movieSelect(); // select movies
   }
 
   /**
@@ -384,6 +356,7 @@ public class Backend implements BackendInterface {
    */
   @Override
   public int getNumberOfMovies() {
+    movieSelect(); // select movies
     return movies.size();
   }
 
@@ -420,6 +393,7 @@ public class Backend implements BackendInterface {
   public List<MovieInterface> getThreeMovies(int startingIndex) {
     // top three movies starting from the startingIndex
     List<MovieInterface> threeMovies = new ArrayList<MovieInterface>();
+    movieSelect(); // select movies
 
     // check if startingIndex valid
     if (startingIndex < 0 || startingIndex > movies.size()-1) {

@@ -78,6 +78,7 @@ public class TestBackend {
   public boolean testInitialNumberOfMovies() {
     try {
       // instantiate once BackendInterface is implemented
+      
       BackendInterface backendToTest = new Backend(new StringReader(
           "title,original_title,year,genre,duration,country,language,director,writer,production_company,actors,description,avg_vote\n"
               + "The Source of Shadows,The Source of Shadows,2020,Horror,83,USA,English,\"Ryan Bury, Jennifer Bonior\",\"Jennifer Bonior, Trevor Botkin\",Four Thieves Productions,\"Ashleigh Allard, Tom Bonington, Eliane Gagnon, Marissa Kaye Grinestaff, Jenna Heffernan, Joshua Hummel, Janice Kingsley, Chris Labasbas, Jared Laufree, Dominic Lee, Vic May, Sienna Mazzone, Lizzie Mounter, Grace Mumm, Ashley Otis\",\"A series of stories woven together by one of our most primal fears, the fear of the unknown.\",3.5\n"
@@ -226,6 +227,7 @@ public class TestBackend {
           ));
 
       backendToTest.addGenre("Action"); // add genre Action
+      backendToTest.addAvgRating("2.9");
       if (backendToTest.getThreeMovies(0).size() == 1
           && backendToTest.getThreeMovies(0).get(0).getTitle().equals("The Insurrection")) {
         // test passed
@@ -385,6 +387,9 @@ public class TestBackend {
 
       List<String> titles = new ArrayList<String>();
       backendToTest.addGenre("Action"); // add genre Action
+      backendToTest.addAvgRating("2"); // add rating 2
+      backendToTest.addAvgRating("5"); // add rating 5
+      backendToTest.addAvgRating("7"); // add rating 7
       // retrieve all the titles
       titles.add(backendToTest.getThreeMovies(0).get(0).getTitle());
       titles.add(backendToTest.getThreeMovies(0).get(1).getTitle());
@@ -451,30 +456,30 @@ public class TestBackend {
               + "The Insurrection,The Insurrection,2020,\"Action, Horror\",90,USA,English,Rene Perez,Rene Perez,,\"Michael Paré, Wilma Elles, Joseph Camilleri, Rebecca Tarabocchia, Jeanine Harrington, Malorie Glavan, Danner Boyd, Michael Cendejas, Woody Clendenen, Keely Dervin, Aaron Harvey, Tony Jackson, Michael Jarrod, Angelina Karo, Bernie Kelly\",The director of the largest media company wants to expose how left-wing powers use film to control populations.,2.9\n"
               + "Valley Girl,Valley Girl,2020,\"Comedy, Musical, Action\",102,USA,English,Rachel Lee Goldenberg,\"Amy Talkington, Andrew Lane\",Sneak Preview Productions,\"Jessica Rothe, Josh Whitehouse, Jessie Ennis, Ashleigh Murray, Chloe Bennet, Logan Paul, Mae Whitman, Mario Revolori, Rob Huebel, Judy Greer, Alex Lewis, Alex MacNicoll, Danny Ramirez, Andrew Kai, Allyn Rachel\",\"Set to a new wave '80s soundtrack, a pair of young lovers from different backgrounds defy their parents and friends to stay together. A musical adaptation of the 1983 film.\",5.4\n"
               + "Movie 1,Movie 1,2021,Family,83,USA,English,\"Ryan Bury, Jennifer Bonior\",\"Jennifer Bonior, Trevor Botkin\",Four Thieves Productions,\"Ashleigh Allard, Tom Bonington, Eliane Gagnon, Marissa Kaye Grinestaff, Jenna Heffernan, Joshua Hummel, Janice Kingsley, Chris Labasbas, Jared Laufree, Dominic Lee, Vic May, Sienna Mazzone, Lizzie Mounter, Grace Mumm, Ashley Otis\",\"A series of stories woven together by one of our most primal fears, the fear of the unknown.\",3.2\n"
-              + "Movie 2,Movie 1,2021,\"Comedy, Musical, Action\",83,USA,English,\"Ryan Bury, Jennifer Bonior\",\"Jennifer Bonior, Trevor Botkin\",Four Thieves Productions,\"Ashleigh Allard, Tom Bonington, Eliane Gagnon, Marissa Kaye Grinestaff, Jenna Heffernan, Joshua Hummel, Janice Kingsley, Chris Labasbas, Jared Laufree, Dominic Lee, Vic May, Sienna Mazzone, Lizzie Mounter, Grace Mumm, Ashley Otis\",\"A series of stories woven together by one of our most primal fears, the fear of the unknown.\",7.3\n"
+              + "Movie 2,Movie 2,2021,\"Comedy, Musical, Action\",83,USA,English,\"Ryan Bury, Jennifer Bonior\",\"Jennifer Bonior, Trevor Botkin\",Four Thieves Productions,\"Ashleigh Allard, Tom Bonington, Eliane Gagnon, Marissa Kaye Grinestaff, Jenna Heffernan, Joshua Hummel, Janice Kingsley, Chris Labasbas, Jared Laufree, Dominic Lee, Vic May, Sienna Mazzone, Lizzie Mounter, Grace Mumm, Ashley Otis\",\"A series of stories woven together by one of our most primal fears, the fear of the unknown.\",7.3\n"
           ));
 
       List<String> titles = new ArrayList<String>();
       backendToTest.addAvgRating("3"); // add rating 3
+      backendToTest.addGenre("Family"); // add genre Family
+
       // retrieve all the titles
       titles.add(backendToTest.getThreeMovies(0).get(0).getTitle());
-      titles.add(backendToTest.getThreeMovies(0).get(1).getTitle());
-      if (backendToTest.getThreeMovies(0).size() != 2
-          || !titles.contains("Movie 1")
-          || !titles.contains("The Source of Shadows")) {
+      if (backendToTest.getThreeMovies(0).size() != 1
+          || !titles.contains("Movie 1")) {
         // test failed
         return false;
       }
-
+      
       titles = new ArrayList<String>(); // reset titles
+      backendToTest.removeAvgRating("3"); // remove rating 3
+      backendToTest.removeGenre("Family"); // remove genre Family
       backendToTest.addAvgRating("5"); // add rating 5
+      backendToTest.addGenre("Comedy"); // add genre Comedy
+      
       // retrieve all the titles
       titles.add(backendToTest.getThreeMovies(0).get(0).getTitle());
-      titles.add(backendToTest.getThreeMovies(0).get(1).getTitle());
-      titles.add(backendToTest.getThreeMovies(0).get(2).getTitle());
-      if (backendToTest.getThreeMovies(0).size() != 3
-          || !titles.contains("Movie 1")
-          || !titles.contains("The Source of Shadows")
+      if (backendToTest.getThreeMovies(0).size() != 1
           || !titles.contains("Valley Girl")) {
         // test failed
         return false;
@@ -484,11 +489,7 @@ public class TestBackend {
       backendToTest.addAvgRating("1"); // add rating 1 and should have no change
       // retrieve all the titles
       titles.add(backendToTest.getThreeMovies(0).get(0).getTitle());
-      titles.add(backendToTest.getThreeMovies(0).get(1).getTitle());
-      titles.add(backendToTest.getThreeMovies(0).get(2).getTitle());
-      if (backendToTest.getThreeMovies(0).size() != 3
-          || !titles.contains("Movie 1")
-          || !titles.contains("The Source of Shadows")
+      if (backendToTest.getThreeMovies(0).size() != 1
           || !titles.contains("Valley Girl")) {
         // test failed
         return false;
