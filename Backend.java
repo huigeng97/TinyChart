@@ -99,12 +99,7 @@ public class Backend implements BackendInterface {
     MovieDataReaderInterface mdr = new MovieDataReader();
 
     try {
-      // if the input is a String containing movie info
-      if (args.getClass().toString().equals("class java.io.StringReader")) {
-        data = mdr.readDataSet(args);
-      } else { // if the input isn't a String (but a file)
-        data = mdr.readDataSet(args);
-      }
+      data = mdr.readDataSet(args);
     } catch (IOException | DataFormatException e) {
       e.printStackTrace();
     }
@@ -422,7 +417,7 @@ public class Backend implements BackendInterface {
   public List<MovieInterface> getThreeMovies(int startingIndex) {
     // top three movies starting from the startingIndex
     List<MovieInterface> threeMovies = new ArrayList<MovieInterface>();
-    
+
     // check if startingIndex valid
     if (startingIndex < 0 || startingIndex > movies.size()-1) {
       return threeMovies;
