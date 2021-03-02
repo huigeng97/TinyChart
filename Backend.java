@@ -80,7 +80,9 @@ public class Backend implements BackendInterface {
    * data file passed as a command line argument to the application. It will 
    * then store the list of movies that the MovieDataReaderInterface provides.
    * 
-   * @param args the path of the data file with movie info
+   * @param args Can be the movie data file path or raw movie data. If it's
+   * the movie data file path, args should be `new FileReader(filePath)`, 
+   * otherwise it should be `new StringReader(rawData)`.
    */
   public Backend(Reader args) {
     this.capacity = 100;
@@ -418,9 +420,12 @@ public class Backend implements BackendInterface {
    */
   @Override
   public List<MovieInterface> getThreeMovies(int startingIndex) {
+    // top three movies starting from the startingIndex
+    List<MovieInterface> threeMovies = new ArrayList<MovieInterface>();
+    
     // check if startingIndex valid
     if (startingIndex < 0 || startingIndex > movies.size()-1) {
-      return null;
+      return threeMovies;
     }
 
     // sort the result set in descending order
@@ -433,8 +438,6 @@ public class Backend implements BackendInterface {
       movies.set(j+1, temp);
     }
 
-    // top three movies starting from the startingIndex
-    List<MovieInterface> threeMovies = new ArrayList<MovieInterface>();
     // get three movies starting from startingIndex
     for (int i = startingIndex; i < startingIndex + 3 && i < movies.size(); i++) {
       threeMovies.add(movies.get(i));
