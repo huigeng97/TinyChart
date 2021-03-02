@@ -1,5 +1,9 @@
 import java.util.List;
 import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+
 /**
  * This class is the frontend of the Movie Mapper project. It allows users to move from the base mode
  * to the genre selection and ratings mode and view the available movies.
@@ -12,6 +16,16 @@ public class Frontend {
 	private String [] selectedGenres;
 	private String [] selectedRatings;
 
+	public static void main(String[] args) {
+		Backend backend;
+		try {
+			backend = new Backend(new FileReader("/Users/austincohen/Documents/Wisconsin 1/CS 400/P01 MovieHashing/src/movies.csv"));
+			Frontend x=new Frontend();
+			x.run(backend);
+		} catch (FileNotFoundException e) {
+		}
+	}
+	
 	public Frontend() {
 	}
 	/**
