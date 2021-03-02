@@ -276,7 +276,7 @@ public class Backend implements BackendInterface {
           currNode = currNode.next;
         }
       }
-      if (currRating.size() == 0) {
+      if (currGenre.size() == 0) {
         movies = new ArrayList<MovieInterface>();
       }
     }
