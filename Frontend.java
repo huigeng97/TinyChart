@@ -40,7 +40,7 @@ public class Frontend {
 
 	/**
 	 * Main class creates a backend and frontend class and 
-	 * runs it. Catches FileNotFound Exception
+	 * runs it. Catches FileNotFound Excetption 
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -78,16 +78,16 @@ public class Frontend {
 		String userInput="";
 		//welcome message
 		System.out.println("Welcome to MovieMapper Base Mode. You may type numbers to naviage through the "
-				+ "given movies which are ranked in decending rating order. \"x\" to quit.");
+				+ "given movies which are ranked in descending rating order. \"x\" to quit.");
 		System.out.println("Enter \"g\" to enter genre mode and enter \"r\" to enter ratings mode.");
 		//prints first three movies
 		//big for loop which keeps user in program "x" leaves
 		List<MovieInterface> currThree;
 		int location=0;
+		currThree=backend.getThreeMovies(location);
+		for (int i=0; i<currThree.size();i++)
+			System.out.println(currThree.get(i));
 		while (!userInput.equals("x")) {
-			currThree=backend.getThreeMovies(location);
-			for (int i=0; i<currThree.size();i++)
-				System.out.println(currThree.get(i));
 			if (backend.getNumberOfMovies()==0)
 				System.out.println("There are no movies selected, \"x\" to exit, \"g\" to enter genre mode, or \"r\" to enter ratings mode.");
 			else if (backend.getNumberOfMovies()==1)
@@ -100,10 +100,16 @@ public class Frontend {
 				break;//break loop if user enters "x"
 			if (userInput.equals("g")) {//enter genre mode 
 				runGenreMode(selectedGenres);
+				currThree=backend.getThreeMovies(location);
+				for (int i=0; i<currThree.size();i++)
+					System.out.println(currThree.get(i));;
 				continue;//return from genre mode
 			}
 			if (userInput.equals("r")) {//enters rating mode
 				runRatingSelectionMode(selectedRatings);
+				currThree=backend.getThreeMovies(location);
+				for (int i=0; i<currThree.size();i++)
+					System.out.println(currThree.get(i));
 				continue;//returns from ratings mode
 			}
 			int x=turnStringToInt(userInput);//turns input into a string
@@ -111,7 +117,12 @@ public class Frontend {
 				System.out.println("Invalid Input");
 				continue;
 			}
+			else {
 			location=x-1;//moves down list of movies
+			currThree=backend.getThreeMovies(location);
+			for (int i=0; i<currThree.size();i++)
+				System.out.println(currThree.get(i));
+			}
 		}
 	}
 	/**
@@ -129,8 +140,8 @@ public class Frontend {
 		System.out.println("If multiple genres are selected only movies that are in both genres will"
 				+ "be shown."+
 				"The genres are listed below:");
+		printGenres(arr, genreList);//prints current list of selected and unselected
 		while (!userInput.equals("x")) {
-			printGenres(arr, genreList);//prints current list of selected and unselected
 			//loop instructions 
 			System.out.println("Enter the number of the genre you would like to select or unselect or \"x\" to exit.");
 			userInput=sc.next();
@@ -144,10 +155,12 @@ public class Frontend {
 			if(arr[genre-1].equals("SELECTED")) {//selects genre
 				arr[genre-1]="UNSELECTED";
 				backend.removeGenre(genreList.get(genre-1));
+				printGenres(arr, genreList);//prints current list of selected and unselected
 			}
 			else if(arr[genre-1].equals("UNSELECTED")) {//unselects genre
 				arr[genre-1]="SELECTED";
 				backend.addGenre(genreList.get(genre-1));
+				printGenres(arr, genreList);//prints current list of selected and unselected
 			}
 		}
 		return null;//should never get here
@@ -165,8 +178,8 @@ public class Frontend {
 				+ "then return to base mode by typing \"x\". ");
 		System.out.println("If multiple ratings are selected if a movie has any of the selected ratings it will be shown."+
 				"The ratings selection is below:");
+		printRatings(givenArr);
 		while (!userInput.equals("x")) {
-			printRatings(givenArr);
 			System.out.println("Enter the rating you would like to select or unselect or \"x\" to exit.");
 			userInput=sc.next();
 			if (userInput.equals("x"))
@@ -179,10 +192,12 @@ public class Frontend {
 			if(arr[rating].equals("SELECTED")) {//selects genre
 				arr[rating]="UNSELECTED";
 				backend.removeAvgRating((rating)+"");
+				printRatings(givenArr);
 			}
 			else if(arr[rating].equals("UNSELECTED")) {//unselects genre
 				arr[rating]="SELECTED";
 				backend.addAvgRating((rating)+"");
+				printRatings(givenArr);
 			}
 		}
 		return null;
