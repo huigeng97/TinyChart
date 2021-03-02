@@ -1,3 +1,25 @@
+//////////////// Frontend //////////////////////////
+//
+// Title:   This programs creates the Frontend class 
+//          which is made to use the backend and movie classes
+//					Creates an application for users to scroll through 
+//					and select movies 
+//
+// Course:   CS 400 Spring 2020
+//
+// Name: Austin Cohen 
+// Email: aacohen3@wisc.edu
+// Team: GE Red
+// Role: Frontend Developer
+// TA: Surabhi
+// Lecturer: Florian Heimerl
+//
+///////////////////////// ALWAYS CREDIT OUTSIDE HELP //////////////////////////
+//
+// Persons:         NONE
+// Online Sources:  NONE 
+//
+///////////////////////////////////////////////////////////////////////////////
 import java.util.List;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
@@ -16,6 +38,11 @@ public class Frontend {
 	private String [] selectedGenres;
 	private String [] selectedRatings;
 
+	/**
+	 * Main class creates a backend and frontend class and 
+	 * runs it. Catches FileNotFound Exception
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Backend backend;
 		try {
