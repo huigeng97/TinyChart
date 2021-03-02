@@ -88,6 +88,7 @@ public class Frontend {
 		for (int i=0; i<currThree.size();i++)
 			System.out.println(currThree.get(i));
 		while (!userInput.equals("x")) {
+			location=0;
 			if (backend.getNumberOfMovies()==0)
 				System.out.println("There are no movies selected, \"x\" to exit, \"g\" to enter genre mode, or \"r\" to enter ratings mode.");
 			else if (backend.getNumberOfMovies()==1)
