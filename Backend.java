@@ -229,29 +229,29 @@ public class Backend implements BackendInterface {
     int index = 0; // index of rating hash table
     movies = new ArrayList<MovieInterface>(); // reset movies
 
-    if (currRating.size() == 0) { // if genre filter only
-      for (int i = 0; i < currGenre.size(); i++) { // traverse selected genres
-        index = hashIndexHelper(currGenre.get(i), capacity); // implement hash function
-        LinkedNode currNode = genreList[index]; // current node
-
-        if (movies.size() == 0) { // if first genre
-          while (currNode != null) { // traverse the chain
-            movies.add(currNode.movie); // add each movie on the chain
-            currNode = currNode.next;
-          }
-        } else { // if not first genre
-          // ArrayList used to save movies that fulfill all the genres
-          List<MovieInterface> temp = new ArrayList<MovieInterface>();
-          while (currNode != null) { // traverse the chain
-            if (movies.contains(currNode.movie)) { // if fulfill all the genres
-              temp.add(currNode.movie); // add movie
-            }
-            currNode = currNode.next;
-          }
-          movies = temp; // renew with movies that fulfill all the genres
-        }
-      }
-    } else { // if there is rating filter
+//    if (currRating.size() == 0) { // if genre filter only
+//      for (int i = 0; i < currGenre.size(); i++) { // traverse selected genres
+//        index = hashIndexHelper(currGenre.get(i), capacity); // implement hash function
+//        LinkedNode currNode = genreList[index]; // current node
+//
+//        if (movies.size() == 0) { // if first genre
+//          while (currNode != null) { // traverse the chain
+//            movies.add(currNode.movie); // add each movie on the chain
+//            currNode = currNode.next;
+//          }
+//        } else { // if not first genre
+//          // ArrayList used to save movies that fulfill all the genres
+//          List<MovieInterface> temp = new ArrayList<MovieInterface>();
+//          while (currNode != null) { // traverse the chain
+//            if (movies.contains(currNode.movie)) { // if fulfill all the genres
+//              temp.add(currNode.movie); // add movie
+//            }
+//            currNode = currNode.next;
+//          }
+//          movies = temp; // renew with movies that fulfill all the genres
+//        }
+//      }
+//    } else { // if there is rating filter 
       // loop through rating hash table
       for (int i = 0; i < currRating.size(); i++) {
         // implement hash function to find index of rating
@@ -277,7 +277,7 @@ public class Backend implements BackendInterface {
         }
       } 
     }
-  }
+//  }
 
   /**
    * A helper method that produces the index in the hash table for keys
