@@ -22,6 +22,7 @@ public class Movie implements MovieInterface {
     String[] gen = genres.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
     this.genres = new ArrayList<String>();
     for (int i = 0; i < gen.length; i++) {
+      gen[i] = gen[i].replace(" ", "");
       this.genres.add(gen[i]);
     }
     this.avgVote = Float.parseFloat(avgVote);
@@ -73,11 +74,11 @@ public class Movie implements MovieInterface {
   @Override
   public int compareTo(MovieInterface otherMovie) {
     if (avgVote-otherMovie.getAvgVote()>0)
-      return 1;
+      return -1;
     else if (avgVote-otherMovie.getAvgVote()==0)
       return 0;
     else
-      return -1;
+      return 1;
   }
 
 }

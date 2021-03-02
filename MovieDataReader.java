@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -44,12 +48,13 @@ public class MovieDataReader implements MovieDataReaderInterface {
           throw new DataFormatException();
         movies.add(new Movie(values[titleInd], values[yearInd], values[directorInd],
             values[descriptInd], values[genresInd], values[voteInd]));
+        //System.out.println(movies.get(count-1));
       }
       count++;
     }
     return movies;
   }
-
+//
 //  public static void main(String[] args) {
 //    String path = "\\Users\\sudhi\\Downloads\\movies.csv";
 //    MovieDataReader mdr = new MovieDataReader();
