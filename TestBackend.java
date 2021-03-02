@@ -151,7 +151,7 @@ public class TestBackend {
               + "Valley Girl,Valley Girl,2020,\"Comedy, Musical, Romance\",102,USA,English,Rachel Lee Goldenberg,\"Amy Talkington, Andrew Lane\",Sneak Preview Productions,\"Jessica Rothe, Josh Whitehouse, Jessie Ennis, Ashleigh Murray, Chloe Bennet, Logan Paul, Mae Whitman, Mario Revolori, Rob Huebel, Judy Greer, Alex Lewis, Alex MacNicoll, Danny Ramirez, Andrew Kai, Allyn Rachel\",\"Set to a new wave '80s soundtrack, a pair of young lovers from different backgrounds defy their parents and friends to stay together. A musical adaptation of the 1983 film.\",5.4\n"
           ));
 
-      if (backendToTest.getThreeMovies(0) == null) {
+      if (backendToTest.getThreeMovies(0).size() == 0) {
         // test passed
         return true;
       } else {
@@ -409,8 +409,8 @@ public class TestBackend {
         return false;
       }
 
-      backendToTest.addGenre("Horror"); // add genre Horror and should have no result
-      if (backendToTest.getThreeMovies(0) != null) {
+      backendToTest.addGenre("Horror"); // add genre Horror and should have 0 result
+      if (backendToTest.getThreeMovies(0).size() != 0) {
         // test failed
         return false;
       }
