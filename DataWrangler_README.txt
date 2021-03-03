@@ -2,7 +2,7 @@ DataWrangler README for Project One (CS400 @ UW Madison)
 ========================================================
 Name of DataWrangler: Gahan Sudhir
 @wisc.edu Email of DataWrangler: gsudhir@wisc.edu
-Group: MM
+Group: GE
 Team: red
 Files Written by Me:
 --------------------
