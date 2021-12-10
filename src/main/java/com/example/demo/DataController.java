@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.boot.actuate.endpoint.web.Link;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,14 +28,14 @@ public class DataController {
     protected EntityManager em;
 
     // return a POJ class text of Node (will show in JSON format);
-    @RequestMapping("/data")
-    public Node se2(String name, Model model) {
+    @RequestMapping("/data/{id}/{dimension}")
+    public Node se2(String name, Model model, @PathVariable String id, @PathVariable String dimension) {
 
         JSONParser jsonParser = new JSONParser();
 
         JSONObject treeMapData = new JSONObject();
 
-        try (FileReader reader = new FileReader("src/main/java/com/example/demo/data.json"))
+        try (FileReader reader = new FileReader("src/main/java/com/example/demo/data" + id + ".json"))
         {
             //Read JSON file
             Object obj = jsonParser.parse(reader);
@@ -48,8 +49,12 @@ public class DataController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return parseTreeMapObject(treeMapData);
+        Node node = parseTreeMapObject(treeMapData);
+        // TODO: sort the node, rearrange based on the size of the chart;
+        DataProcess.processData(node, dimension);
+        return node;
     }
+
 
     private static Node parseTreeMapObject(JSONObject treeMapData) {
 
