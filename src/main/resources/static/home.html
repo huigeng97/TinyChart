@@ -35,6 +35,20 @@
     <button class="button button1" onclick="uploadDate()">Upload data</button>
 </div>
 
+<div>
+    <label for="data">Choose a data:</label>
+    <select id="data" name="datalist" form="dataform">
+        <option value="data1">Data1</option>
+        <option value="data2">Data2</option>
+        <option value="data3">Data3</option>
+        <option value="data4">Data4</option>
+        <option value="data5">Data5</option>
+    </select>
+
+    <form action="/action_page.php" id="dataform">
+        <input type="submit">
+    </form>
+</div>
 
 <script>
 
@@ -56,7 +70,7 @@
       "translate(" + margin.left + "," + margin.top + ")");
 
     // read json data
-    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_dendrogram_full.json", function(data) {
+    d3.json("http://localhost:8000/data", function(data) {
 
       // Give the data to this cluster layout:
       var root = d3.hierarchy(data).sum(function(d){ return d.value}) // Here the size of each leave is given in the 'value' field in input data
