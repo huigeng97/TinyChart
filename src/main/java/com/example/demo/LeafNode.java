@@ -7,8 +7,7 @@ public class LeafNode extends Node {
     String colname;
     String name;
 
-    public LeafNode(String group, long value, String colname, String name) {
-        this(name);
+    public LeafNode(String name, long value, String colname, String group) {
         this.group = group;
         this.value = value;
         this.colname = colname;
@@ -16,17 +15,37 @@ public class LeafNode extends Node {
     }
 
     public LeafNode(String name) {
-        this();
         this.name = name;
     }
 
-    public LeafNode() {
-        super();
-    }
+    public LeafNode() {}
 
     public LeafNode(Node root) {
         this.colname = root.colname;
         this.name = root.name;
+    }
+    public void setValue(Long value) {
+        this.value = value;
+    }
+
+    @Override
+    public String getColname() {
+        return colname;
+    }
+
+    @Override
+    public void setColname(String colname) {
+        this.colname = colname;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getGroup() {

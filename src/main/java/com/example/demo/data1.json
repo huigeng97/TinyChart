@@ -22,4 +22,5 @@
       {"name":"mister_m","group":"D","value":16,"colname":"level3"},
       {"name":"mister_n","group":"D","value":2800,"colname":"level3"}],
     "colname":"level2"}],
-  "name":"CEO"}
+  "name":"CEO",
+  "colname":"level1"}

@@ -51,7 +51,9 @@ public class DataController {
         }
         Node node = parseTreeMapObject(treeMapData);
         // TODO: sort the node, rearrange based on the size of the chart;
-        DataProcess.processData(node, dimension);
+        if (Integer.valueOf(dimension) <= 500 && Integer.valueOf(dimension) >= 100) {
+            DataProcess.processData(node, dimension);
+        }
         return node;
     }
 
