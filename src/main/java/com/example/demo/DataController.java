@@ -52,9 +52,10 @@ public class DataController {
             node = parseTreeMapObject((JSONObject) treeMapData);
         }
 
+        DataProcess dp = new DataProcess();
         // TODO: sort the node, rearrange based on the size of the chart;
         if (Integer.valueOf(dimension) <= 500 && Integer.valueOf(dimension) >= 100) {
-            DataProcess.processData(node, dimension);
+            dp.processData(node, dimension);
         }
         return node;
     }

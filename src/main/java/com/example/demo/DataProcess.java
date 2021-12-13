@@ -14,43 +14,33 @@ public class DataProcess {
 
 
 
-    public static Node processData(Node node, String dimension) {
+    public Node processData(Node node, String dimension) {
 
-        Object[] pars = parameters.get(dimension);
-        if (pars != null) {
-            int maxLevel = (Integer) pars[0];
-            double minSize = (Double) pars[1];
+        int dim = Integer.valueOf(dimension);
+        // 100 : 1, 200 : 1, 300 : 2, 400 : 2; 500 : 3;
+        int maxLevel = Math.min(4, (dim - 100) / 200 + 1);
+        double minSize = (double) 20 / dim;
 
-
-
-
-            long sum = getSum(node);
-            long minValue = (long) (sum * minSize);
-            System.out.println("minValue " + minValue);
-            // merge the level if it exceeds the maxLevel;
-            mergeLevel(node, maxLevel, 0);
-            sortAndArrange(node, minValue, true);
-            return node;
-        } else {
-            // alternative way;
-            int dim = Integer.valueOf(dimension);
-            // 100 : 1, 200 : 1, 300 : 2, 400 : 2; 500 : 3;
-            int maxLevel = Math.min(4, (dim - 100) / 200 + 1);
-            double minSize = (double) 25 / dim;
-
-            long sum = getSum(node);
-            long minValue = (long) (sum * minSize);
-            System.out.println("minValue " + minValue);
-            // merge the level if it exceeds the maxLevel;
-            mergeLevel(node, maxLevel, 0);
-            sortAndArrange(node, minValue, true);
-            return node;
-        }
+        long sum = getSum(node);
+        long minValue = (long) (sum * minSize);
+        System.out.println("minValue " + minValue);
+        // merge the level if it exceeds the maxLevel;
+        mergeLevel(node, maxLevel, 0);
+        sortAndArrange(node, minValue, true);
+        return node;
     }
 
+
+    Map<Node, Long> nodeSum = new HashMap<>();
     // this is to sort the node and combine part less than the value;
-    private static Node sortAndArrange(Node node, long minValue, boolean isRoot) {
-        long sum = getSum(node);
+    private  Node sortAndArrange(Node node, long minValue, boolean isRoot) {
+        long sum = 0;
+        if (nodeSum.containsKey(node)) {
+            sum = nodeSum.get(node);
+        } else {
+            sum = getSum(node);
+            nodeSum.put(node, sum);
+        }
         if (node.getChildren() == null) {
             return node;
         } else if (sum < minValue) {
@@ -79,7 +69,13 @@ public class DataProcess {
             long subSum = 0;
             LinkedList copyChildren2 = new LinkedList<>();
             for (Node child : node.getChildren()) {
-                long temp = getSum(child);
+                long temp = 0;
+                if (nodeSum.containsKey(child)) {
+                    temp = nodeSum.get(child);
+                } else {
+                    temp = getSum(node);
+                    nodeSum.put(child, temp);
+                }
                 if (temp < minValue) {
                     subSum += getSum(child);
                 } else if (subSum != 0 && subSum < minValue) {
@@ -110,11 +106,17 @@ public class DataProcess {
 
 
     // this is to merge the unnecessary level in the node;
-    private static Node mergeLevel(Node node, int maxLevel, int currLevel) {
+    private Node mergeLevel(Node node, int maxLevel, int currLevel) {
         if (node.getChildren() == null) {
             return node;
         } else if (currLevel == maxLevel) {
-            long sum = getSum(node);
+            long sum = 0;
+            if (nodeSum.containsKey(node)) {
+                sum = nodeSum.get(node);
+            } else {
+                sum = getSum(node);
+                nodeSum.put(node, sum);
+            }
             LeafNode ret = new LeafNode(node);
             ret.setValue(sum);
             ret.setName(node.name);
@@ -130,7 +132,10 @@ public class DataProcess {
 
     }
 
-    private static long getSum(Node node) {
+    private long getSum(Node node) {
+        if (nodeSum.containsKey(node)) {
+            return nodeSum.get(node);
+        }
         if (node.getChildren() == null) {
             LeafNode leaf = (LeafNode) node;
             return leaf.getValue();
@@ -139,6 +144,7 @@ public class DataProcess {
             for (Node child : node.getChildren()) {
                 sum += getSum(child);
             }
+            nodeSum.put(node, sum);
             return sum;
         }
 
