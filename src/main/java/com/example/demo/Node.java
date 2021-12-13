@@ -17,6 +17,10 @@ public class Node {
     public Node() {
     }
 
+    public Node(String name) {
+        this.name = name;
+    }
+
     public String getColname() {
         return colname;
     }

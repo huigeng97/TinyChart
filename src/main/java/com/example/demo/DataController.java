@@ -16,10 +16,7 @@ import javax.persistence.PersistenceContext;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 @RestController
 public class DataController {
@@ -33,14 +30,13 @@ public class DataController {
 
         JSONParser jsonParser = new JSONParser();
 
-        JSONObject treeMapData = new JSONObject();
+        Object treeMapData = null;
 
         try (FileReader reader = new FileReader("src/main/java/com/example/demo/data" + id + ".json"))
         {
             //Read JSON file
-            Object obj = jsonParser.parse(reader);
+            treeMapData = jsonParser.parse(reader);
 
-            treeMapData = (JSONObject) obj;
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -49,12 +45,51 @@ public class DataController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Node node = parseTreeMapObject(treeMapData);
+        Node node = null;
+        if (id.equals("1")) {
+            node = parseCVSTreeMapObject((JSONArray) treeMapData);
+        } else {
+            node = parseTreeMapObject((JSONObject) treeMapData);
+        }
+
         // TODO: sort the node, rearrange based on the size of the chart;
         if (Integer.valueOf(dimension) <= 500 && Integer.valueOf(dimension) >= 100) {
             DataProcess.processData(node, dimension);
         }
         return node;
+    }
+
+    private static Node parseCVSTreeMapObject(JSONArray treeMapData) {
+        Map<String, Node> memo = new HashMap<>();
+        JSONObject rootJson = (JSONObject) treeMapData.get(0);
+        String name = (String) rootJson.get("id");
+        Node root = new Node(name);
+        root.setChildren(new ArrayList<Node>());
+        memo.put(name, root);
+        for (int i = 1; i < treeMapData.size(); i++) {
+            JSONObject curr = (JSONObject) treeMapData.get(i);
+            // this is a leafNode;
+            String id = (String) curr.get("id");
+            System.out.println(id);
+            String[] ids = id.split("\\.");
+            String currName = ids[ids.length - 1];
+            String parName = ids[ids.length - 2];
+            Node par = memo.get(parName);
+            System.out.println("par" + par.getName());
+            if (curr.get("value") != null) {
+                long value = (long) curr.get("value");
+                LeafNode currNode = new LeafNode(currName, value);
+                par.getChildren().add(currNode);
+            }
+            // this is a Node;
+            else {
+                Node currNode = new Node(currName);
+                par.getChildren().add(currNode);
+                currNode.setChildren(new ArrayList<Node>());
+                memo.put(currName, currNode);
+            }
+        }
+        return root;
     }
 
 

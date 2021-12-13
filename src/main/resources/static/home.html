@@ -2,7 +2,8 @@
 <meta charset="utf-8">
 <style>
     .button {
-        background-color: #4CAF50; /* Green */
+        background-color: #4CAF50;
+        /* Green */
         border: none;
         color: white;
         padding: 15px 32px;
@@ -14,7 +15,11 @@
         cursor: pointer;
     }
 
-    .button1 {color: black; background-color: darkgray;}
+    .button1 {
+        color: black;
+        background-color: darkgray;
+    }
+
     /*.button2 {width: 50%;}*/
     /*.button3 {width: 100%;}*/
 </style>
@@ -22,22 +27,24 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 
 <!-- Create a div where the graph will take place -->
+<h2>Welcome to the TinyChart</h2>
+<br></br>
 <div id="my_dataviz"></div>
 
+<button class="button" onclick="chooseFile1('12px', 1000)">Original</button>
+<button class="button" onclick="chooseFile1('12px', 500)">500px * 500px</button>
+<button class="button" onclick="chooseFile2('12px', 400)">400px * 400px</button>
+<button class="button" onclick="chooseFile2('12px', 300)">300px * 300px</button>
+<button class="button" onclick="chooseFile2('10px', 200)">200px * 200px</button>
+<button class="button" onclick="chooseFile2('8px', 100)">100px * 100px</button>
 
-<button class="button" onclick="myFunction('20px',500)">500px * 500px</button>
-<button class="button" onclick="myFunction('20px',400)">400px * 400px</button>
-<button class="button" onclick="myFunction('15px',300)">300px * 300px</button>
-<button class="button" onclick="myFunction('10px',200)">200px * 200px</button>
-<button class="button" onclick="myFunction('8px',100)">100px * 100px</button>
-
-<div>
-    <button class="button button1" onclick="uploadDate()">Upload data</button>
-</div>
-
+<!-- <div>
+  <button class="button button1" onclick="uploadData()">Upload data</button>
+</div> -->
+<br> </br>
 <div>
     <label for="data">Choose a data:</label>
-    <select id="data" name="datalist" form="dataform">
+    <select id="data" name="datalist" onchange="getOption(value);">
         <option value="data1">Data1</option>
         <option value="data2">Data2</option>
         <option value="data3">Data3</option>
@@ -46,20 +53,37 @@
     </select>
 
 
-    <form action="/action_page.php" id="dataform">
-        <input type="submit">
-    </form>
+    <!-- <form action="/action_page.php" id="dataform">
+      <input type="submit">
+    </form> -->
 </div>
-
+<script src="//d3js.org/d3.v4.min.js"></script>
 <script>
+  var dataID = 1;
+
+  function getOption(v) {
+    // alert(v)
+    if (v == "data1") {
+      dataID = 1;
+    } else if (v == "data2") {
+      dataID = 2;
+    } else if (v == "data3") {
+      dataID = 3;
+    } else if (v == "data4") {
+      dataID = 4;
+    } else if (v == "data5") {
+      dataID = 5;
+    }
+  }
 
 
-  function myFunction(dim, intDim) {
-
+  function chooseFile(dim, intDim) {
     // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 10, bottom: 10, left: 10},
+    var margin = { top: 10, right: 10, bottom: 10, left: 10 },
       width = intDim - margin.left - margin.right,
       height = intDim - margin.top - margin.bottom;
+
+    var format = d3.format(",d");
 
     // append the svg object to the body of the page
     var svg = d3.select("#my_dataviz")
@@ -69,18 +93,25 @@
     .append("g")
     .attr("transform",
       "translate(" + margin.left + "," + margin.top + ")");
-
+    // alert("address: " + "http://localhost:8000/data/" + dataID + "/" + intDim)
     // read json data
-    d3.json("http://localhost:8000/data/1/500", function(data) {
+    d3.json("http://localhost:8000/data/" + dataID + "/" + intDim, function (data) {
 
       // Give the data to this cluster layout:
-      var root = d3.hierarchy(data).sum(function(d){ return d.value}) // Here the size of each leave is given in the 'value' field in input data
+      var root = d3.hierarchy(data).sum(function (d) { return d.value }) // Here the size of each leave is given in the 'value' field in input data
 
       // Then d3.treemap computes the position of each element of the hierarchy
       d3.treemap()
       .size([width, height])
       .padding(2)
       (root)
+
+      var color = d3.scaleOrdinal()
+      .range(d3.schemeCategory10
+      .map(function(c) { c = d3.rgb(c); c.opacity = 0.6; return c; }));
+
+
+
 
       // use this information to add rectangles:
       svg
@@ -93,7 +124,83 @@
       .attr('width', function (d) { return d.x1 - d.x0; })
       .attr('height', function (d) { return d.y1 - d.y0; })
       .style("stroke", "black")
-      .style("fill", "slateblue")
+      .style("fill", function(d) { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+
+      // and to add the text labels
+      svg
+      .selectAll("text")
+      .data(root.leaves())
+      .enter()
+      .append("text")
+      .attr("x", function (d) { return d.x0 + 5 })    // +10 to adjust position (more right)
+        .attr("y", function (d) { return d.y0 + 20 })    // +20 to adjust position (lower)
+        .text(function (d) { return format(d.data.name);})
+        .attr("font-size", dim)
+      .attr("fill", "white")
+    })
+  }
+
+
+
+
+
+  function chooseFile1(fontSize, mapSize) {
+    // set the dimensions and margins of the graph
+// set the dimensions and margins of the graph
+    var margin = {top: 10, right: 10, bottom: 10, left: 10},
+      width = mapSize - margin.left - margin.right,
+      height = mapSize - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    var svg = d3.select("#my_dataviz")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+      "translate(" + margin.left + "," + margin.top + ")");
+
+
+    alert("address: " + "http://localhost:8000/data/" + dataID + "/" + mapSize)
+    // read json data
+    d3.json("http://localhost:8000/data/" + dataID + "/" + mapSize, function (data) {
+
+      // Give the data to this cluster layout:
+      var root = d3.hierarchy(data).sum(function(d){ return d.value}) // Here the size of each leave is given in the 'value' field in input data
+
+      // Then d3.treemap computes the position of each element of the hierarchy
+      d3.treemap()
+      .size([width, height])
+      .paddingTop(28)
+      .paddingRight(7)
+      .paddingInner(3)      // Padding between each rectangle
+        //.paddingOuter(6)
+        //.padding(20)
+        (root)
+
+      // prepare a color scale
+      var color = d3.scaleOrdinal()
+      .domain(["boss1", "boss2", "boss3"])
+      .range([ "#402D54", "#D18975", "#8FD175"])
+
+      // And a opacity scale
+      var opacity = d3.scaleLinear()
+      .domain([10, 30])
+      .range([.5,1])
+
+      // use this information to add rectangles:
+      svg
+      .selectAll("rect")
+      .data(root.leaves())
+      .enter()
+      .append("rect")
+      .attr('x', function (d) { return d.x0; })
+      .attr('y', function (d) { return d.y0; })
+      .attr('width', function (d) { return d.x1 - d.x0; })
+      .attr('height', function (d) { return d.y1 - d.y0; })
+      .style("stroke", "black")
+      .style("fill", function(d){ return color(d.parent.data.name)} )
+      .style("opacity", function(d){ return opacity(d.data.value)})
 
       // and to add the text labels
       svg
@@ -103,9 +210,92 @@
       .append("text")
       .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
         .attr("y", function(d){ return d.y0+20})    // +20 to adjust position (lower)
-        .text(function(d){ return d.data.name })
-        .attr("font-size", dim)
+        .text(function(d){ return d.data.name.replace('mister_','') })
+        .attr("font-size", fontSize)
       .attr("fill", "white")
+
+      // and to add the text labels
+      svg
+      .selectAll("vals")
+      .data(root.leaves())
+      .enter()
+      .append("text")
+      .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
+        .attr("y", function(d){ return d.y0+35})    // +20 to adjust position (lower)
+        .text(function(d){ return d.data.value })
+        .attr("font-size", "11px")
+      .attr("fill", "white")
+
+      // Add title for the 3 groups
+      svg
+      .selectAll("titles")
+      .data(root.descendants().filter(function(d){return d.depth==1}))
+      .enter()
+      .append("text")
+      .attr("x", function(d){ return d.x0})
+      .attr("y", function(d){ return d.y0+21})
+      .text(function(d){ return d.data.name })
+      .attr("font-size", "19px")
+      .attr("fill",  function(d){ return color(d.data.name)} )
+
+      // Add title for the 3 groups
+      svg
+      .append("text")
+      .attr("x", 0)
+      .attr("y", 14)    // +20 to adjust position (lower)
+        .text("Three group leaders and 14 employees")
+        .attr("font-size", "19px")
+      .attr("fill",  "grey" )
+
     })
   }
+
+
+
+
+
+
+  function chooseFile2(fontSize, mapSize) {
+    var width = 960,
+      height = 1060;
+
+    var format = d3.format(",d");
+
+    var color = d3.scaleOrdinal().range(d3.schemeCategory10.map(function (c) {
+      c = d3.rgb(c);
+      c.opacity = 0.6;
+      return c;
+    }));
+
+    var svg = d3.select("#my_dataviz")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+      "translate(" + margin.left + "," + margin.top + ")");
+
+
+    // read json data
+    d3.json("http://localhost:8000/data/" + dataID + "/" + mapSize, function (data) {
+
+      // Give the data to this cluster layout:
+      var root = d3.hierarchy(data).sum(function (d) { return d.value}) // Here the size of each leave is given in the 'value' field in input data
+
+      // Then d3.treemap computes the position of each element of the hierarchy
+      d3.treemap().size([width, height]).padding(2)
+      (root)
+
+      d3.select("body").selectAll(".node").data(root.leaves()).enter().append("div").attr("class", "node").attr("title", function (d) { return d.data.name + "\n" + format(d.value); }).style("left", function (d) { return d.x0 + "px"; }).style("top", function (d) { return d.y0 + "px"; }).style("width", function (d) { return d.x1 - d.x0 + "px"; }).style("height", function (d) { return d.y1 - d.y0 + "px"; }).style("background", function (d) {
+        while (d.depth > 1) d = d.parent;
+        return color(d.data.name);
+      }).append("div").attr("class", "node-label").text(function (d) { return d.data.name}).append("div").attr("class", "node-value").text(function (d) { return format(d.value); });
+    });
+
+    function type (d) {
+      d.value = +d.value;
+      return d;
+    }
+  }
+
 </script>

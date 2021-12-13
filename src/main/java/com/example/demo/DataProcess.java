@@ -5,7 +5,8 @@ import java.util.*;
 
 public class DataProcess {
 
-    public static Map<String, Object[]> parameters =             Map.of( "500" , new Object[]{3, 0.05},
+    public static Map<String, Object[]> parameters =
+            Map.of( "500" , new Object[]{3, 0.05},
             "400" , new Object[]{2, 0.08},
             "300" , new Object[]{2, 0.10},
             "200" , new Object[]{1, 0.10},
@@ -19,6 +20,10 @@ public class DataProcess {
         if (pars != null) {
             int maxLevel = (Integer) pars[0];
             double minSize = (Double) pars[1];
+
+
+
+
             long sum = getSum(node);
             long minValue = (long) (sum * minSize);
             System.out.println("minValue " + minValue);
@@ -27,6 +32,18 @@ public class DataProcess {
             sortAndArrange(node, minValue, true);
             return node;
         } else {
+            // alternative way;
+            int dim = Integer.valueOf(dimension);
+            // 100 : 1, 200 : 1, 300 : 2, 400 : 2; 500 : 3;
+            int maxLevel = Math.min(4, (dim - 100) / 200 + 1);
+            double minSize = (double) 25 / dim;
+
+            long sum = getSum(node);
+            long minValue = (long) (sum * minSize);
+            System.out.println("minValue " + minValue);
+            // merge the level if it exceeds the maxLevel;
+            mergeLevel(node, maxLevel, 0);
+            sortAndArrange(node, minValue, true);
             return node;
         }
     }
@@ -86,10 +103,7 @@ public class DataProcess {
                     ret.setColname(node.colname);
                     return ret;
                 }
-
             }
-
-
             return node;
         }
     }

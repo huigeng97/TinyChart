@@ -28,4 +28,11 @@ public class HomeController {
         return "home.html";
     }
 
+
+    // this is a test page for function2
+    @RequestMapping("/index")
+    public String se2(String name, Model model) {
+        //home page of our app
+        return "index.html";
+    }
 }

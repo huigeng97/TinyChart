@@ -24,6 +24,12 @@ public class LeafNode extends Node {
         this.colname = root.colname;
         this.name = root.name;
     }
+
+    public LeafNode(String name, long value) {
+        this.name = name;
+        this.value = value;
+    }
+
     public void setValue(Long value) {
         this.value = value;
     }
