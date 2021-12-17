@@ -1,6 +1,48 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+    body {
+        background-image: url("bg1.jpg");
+    }
+
+    .left,
+    .right {
+        width: 45%;
+    }
+
+    .left {
+        float: left;
+    }
+
+    .right {
+        float: right;
+    }
+
+    h1 {
+        width: Xu;
+        height: Yu;
+        position: absolute;
+        /* top: 5%; */
+        left: 30%;
+        margin-left: -(X/2)u;
+        margin-top: -(Y/2)u;
+    }
+
+    h2 {
+        width: Xu;
+        height: Yu;
+        /* position: absolute; */
+        /* top: 10%; */
+        /* left: 20%; */
+        margin-left: -(X/2)u;
+        margin-top: -(Y/2)u;
+    }
+
+    input[type="range"] {
+        width: 400px;
+        /* left: 45%; */
+    }
+
     .button {
         background-color: #4CAF50;
         /* Green */
@@ -22,6 +64,7 @@
 
     .rangeslider {
         width: 50%;
+        left: 45%;
     }
 
     .myslider {
@@ -34,7 +77,7 @@
 
     .myslider {
         -webkit-appearance: none;
-        background: #FCF3CF;
+        background: #a17b9e;
         width: 50%;
         height: 20px;
         opacity: 2;
@@ -43,53 +86,69 @@
     .myslider::-webkit-slider-thumb {
         -webkit-appearance: none;
         cursor: pointer;
-        background: #34495E;
+        background: #81d6cf;
         width: 5%;
         height: 20px;
     }
 </style>
 <!-- Load d3.js -->
-<script src="https://d3js.org/d3.v4.js"></script>
 
-<!-- Create a div where the graph will take place -->
-<h2>Welcome to the TinyChart</h2>
+<body>
+<h1>Welcome to the TinyChart</h1>
 <br></br>
-<div id="my_dataviz"></div>
+
+<h2>
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+
+    <!-- Create a div where the graph will take place -->
+
+    <br></br>
+
+    <div id="my_dataviz" class="left" style="margin-left: 5%;"></div>
 
 
-<!-- <button class="button" onclick="chooseFile('20px', 500)">500px * 500px</button>
+    <!-- <button class="button" onclick="chooseFile('20px', 500)">500px * 500px</button>
 <button class="button" onclick="chooseFile('20px', 400)">400px * 400px</button>
 <button class="button" onclick="chooseFile('15px', 300)">300px * 300px</button>
 <button class="button" onclick="chooseFile('10px', 200)">200px * 200px</button>
 <button class="button" onclick="chooseFile('8px', 100)">100px * 100px</button> -->
 
 
-<br></br>
-<div>Please choose the dataset: </div>
-<br></br>
-<div>
-    <label for="data">Choose a data:</label>
-    <select id="data" name="datalist" onchange="getOption(value);">
-        <option value="data1">Data1</option>
-        <option value="data2">Data2</option>
-        <option value="data3">Data3</option>
-        <option value="data4">Data4</option>
-        <option value="data5">Data5</option>
-    </select>
-</div>
+    <div class="right">
+        <br></br>
+        <div>Please choose the dataset: </div>
+        <br></br>
+        <div>
+            <!-- <label for="data">Choose a data:</label> -->
+            <select id="data" name="datalist" onchange="getOption(value);">
+                <option value="data1">Data1</option>
+                <option value="data2">Data2</option>
+                <option value="data3">Data3</option>
+                <option value="data4">Data4</option>
+                <option value="data5">Data5</option>
+            </select>
+        </div>
 
-<br></br>
+        <br></br>
 
-<div>Please choose the size: </div>
-<div class="rangeslider">
-    <input type="range" min="100" max="510" step="10" value="510" class="myslider" id="sliderRange"
-           onchange="updateSlider(this.value)">
-    <p>
-        Size: <span id="sliderAmount"></span>
-    </p>
-</div>
+        <div>Please choose the size: </div>
+        <br></br>
+        <div class="rangeslider">
+            <input type="range" min="100" max="510" step="10" value="100" class="myslider" id="sliderRange"
+                   onchange="updateSlider(this.value)">
+            <p>
+                Size: <span id="sliderAmount"></span>
+            </p>
+        </div>
+    </div>
 
-</div>
+
+</h2>
+</body>
+
+
+
 
 
 <script>
@@ -173,7 +232,8 @@
       .style("fill", function (d) {
         level = Math.max(level, d.depth)
         while (d.depth > 1) d = d.parent;
-        return color(d.data.name);})
+        return color(d.data.name);
+      })
       // and to add the text labels
 
       svg
@@ -181,18 +241,18 @@
       .data(root.leaves())
       .enter()
       .append("text")
-      .attr("x", function (d) { return d.x0})    // +10 to adjust position (more right)
+      .attr("x", function (d) { return d.x0 })    // +10 to adjust position (more right)
         .attr("y", function (d) { return d.y0 })    // +20 to adjust position (lower)
-        .text(function (d) { return d.data.name + (counted.value < 10 ? ("\n" + format(d.value)) : ""); })
+        .text(function (d) { return d.data.name + (mapSize >= 300) ? ("\n" + format(d.value)) : ""); })
         .attr("dy", 1)
-        .attr("font-size",function (d) { return 13 - d.depth * 3 + (level) * 3 })
-        .call(wrap, 50)
+      .attr("font-size", function (d) { return 13 - d.depth * 3 + (level) * 3 })
+      .call(wrap, 50)
       .attr("fill", "black")
     })
   }
 
   function wrap(text, width) {
-    text.each(function() {
+    text.each(function () {
       var text = d3.select(this),
         // text = text.split(".").pop().split(/(?=[A-Z][a-z])/g).join("\n") + "\n",
         words = text.text().split(/\s+/).reverse(),
@@ -212,10 +272,10 @@
           tspan.text(line.join(" "));
           line = [word];
           tspan = text.append("tspan")
-                      .attr("x", x)
-                      .attr("y", y)
-                      .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                      .text(word);
+          .attr("x", x)
+          .attr("y", y)
+          .attr("dy", ++lineNumber * lineHeight + dy + "em")
+          .text(word);
         }
       }
     });
