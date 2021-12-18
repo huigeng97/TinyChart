@@ -31,16 +31,12 @@
     h2 {
         width: Xu;
         height: Yu;
-        /* position: absolute; */
-        /* top: 10%; */
-        /* left: 20%; */
         margin-left: -(X/2)u;
         margin-top: -(Y/2)u;
     }
 
     input[type="range"] {
         width: 400px;
-        /* left: 45%; */
     }
 
     .button {
@@ -108,13 +104,6 @@
     <div id="my_dataviz" class="left" style="margin-left: 5%;"></div>
 
 
-    <!-- <button class="button" onclick="chooseFile('20px', 500)">500px * 500px</button>
-<button class="button" onclick="chooseFile('20px', 400)">400px * 400px</button>
-<button class="button" onclick="chooseFile('15px', 300)">300px * 300px</button>
-<button class="button" onclick="chooseFile('10px', 200)">200px * 200px</button>
-<button class="button" onclick="chooseFile('8px', 100)">100px * 100px</button> -->
-
-
     <div class="right">
         <br></br>
         <div>Please choose the dataset: </div>
@@ -135,12 +124,16 @@
         <div>Please choose the size: </div>
         <br></br>
         <div class="rangeslider">
-            <input type="range" min="100" max="510" step="10" value="100" class="myslider" id="sliderRange"
+            <input type="range" min="100" max="500" step="10" value="500" class="myslider" id="sliderRange"
                    onchange="updateSlider(this.value)">
             <p>
                 Size: <span id="sliderAmount"></span>
             </p>
         </div>
+
+        <div>(Optional:) Please choose the threshold rectangle area:   <input type="text" id="thresholdRatio" name="thresholdRatio" value="100">  </div>
+        <div> Please choose a value between 50 ~ 200;
+
     </div>
 
 
@@ -155,9 +148,10 @@
   var curDim = 1000;
 
   function updateSlider(slideAmount) {
+
     var sliderDiv = document.getElementById("sliderAmount");
-    sliderDiv.innerHTML = slideAmount;
-    curDim = sliderDiv.innerHTML;
+    sliderAmount.innerHTML = slideAmount;
+    curDim = slideAmount;
     chooseFile(curDim);
   }
 
@@ -203,8 +197,9 @@
 
     var format = d3.format(",d");
 
+
     // read json data
-    d3.json("http://localhost:8000/data/" + dataID + "/" + mapSize, function (data) {
+    d3.json("http://localhost:8000/data/" + dataID + "/" + mapSize + "/" + document.getElementById('thresholdRatio').value, function (data) {
 
       var level = 0;
       // Give the data to this cluster layout:
@@ -243,9 +238,9 @@
       .append("text")
       .attr("x", function (d) { return d.x0 })    // +10 to adjust position (more right)
         .attr("y", function (d) { return d.y0 })    // +20 to adjust position (lower)
-        .text(function (d) { return d.data.name + (mapSize >= 300) ? ("\n" + format(d.value)) : ""); })
+        .text(function (d) { return d.data.name + (mapSize > 250 && (mapSize / counted) > 10  ? ("\n" + format(d.value)) : ""); })
         .attr("dy", 1)
-      .attr("font-size", function (d) { return 13 - d.depth * 3 + (level) * 3 })
+      .attr("font-size", function (d) { return (mapSize > 250 && (mapSize / counted) > 10  ? 14 : 12) })
       .call(wrap, 50)
       .attr("fill", "black")
     })

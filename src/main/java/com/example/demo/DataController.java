@@ -25,8 +25,8 @@ public class DataController {
     protected EntityManager em;
 
     // return a POJ class text of Node (will show in JSON format);
-    @RequestMapping("/data/{id}/{dimension}")
-    public Node se2(String name, Model model, @PathVariable String id, @PathVariable String dimension) {
+    @RequestMapping("/data/{id}/{dimension}/{minSize}")
+    public Node se2(String name, Model model, @PathVariable String id, @PathVariable String dimension, @PathVariable String minSize) {
 
         JSONParser jsonParser = new JSONParser();
 
@@ -55,7 +55,7 @@ public class DataController {
         DataProcess dp = new DataProcess();
         // TODO: sort the node, rearrange based on the size of the chart;
         if (Integer.valueOf(dimension) <= 500 && Integer.valueOf(dimension) >= 100) {
-            dp.processData(node, dimension);
+            dp.processData(node, dimension, minSize);
         }
         return node;
     }
@@ -71,12 +71,10 @@ public class DataController {
             JSONObject curr = (JSONObject) treeMapData.get(i);
             // this is a leafNode;
             String id = (String) curr.get("id");
-            System.out.println(id);
             String[] ids = id.split("\\.");
             String currName = ids[ids.length - 1];
             String parName = ids[ids.length - 2];
             Node par = memo.get(parName);
-            System.out.println("par" + par.getName());
             if (curr.get("value") != null) {
                 long value = (long) curr.get("value");
                 LeafNode currNode = new LeafNode(currName, value);

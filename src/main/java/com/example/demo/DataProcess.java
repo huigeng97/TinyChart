@@ -5,23 +5,23 @@ import java.util.*;
 
 public class DataProcess {
 
-    public static Map<String, Object[]> parameters =
-            Map.of( "500" , new Object[]{3, 0.05},
-            "400" , new Object[]{2, 0.08},
-            "300" , new Object[]{2, 0.10},
-            "200" , new Object[]{1, 0.10},
-            "100" , new Object[]{1, 0.25});
-
-
-
-    public Node processData(Node node, String dimension) {
+    public Node processData(Node node, String dimension, String minSizeString) {
 
         int dim = Integer.valueOf(dimension);
         // 100 : 1, 200 : 1, 300 : 2, 400 : 2; 500 : 3;
         int maxLevel = Math.min(4, (dim - 100) / 200 + 1);
-        double minSize = (double) 20 / dim;
+        double minSize = 0;
+        if (minSizeString.equals("100")) {
+            minSize = (double) 800 * 500 / Double.valueOf(minSizeString)/ dim / dim;
+            // 260 * 260 * 0.015 = 1000;
 
+        } else {
+            // minSizeString = 1000 -> minSize = 0.015,
+            minSize = (double) 800 * 500 / Double.valueOf(minSizeString)/ dim / dim;
+        }
+        System.out.println("minSize " + minSize);
         long sum = getSum(node);
+        System.out.println("sum " + sum);
         long minValue = (long) (sum * minSize);
         System.out.println("minValue " + minValue);
         // merge the level if it exceeds the maxLevel;
@@ -56,7 +56,7 @@ public class DataProcess {
                 copyChildren.add(sortAndArrange(child, minValue, false));
             }
             node.setChildren(copyChildren);
-            node.getChildren().sort((a,b) -> (int) (getSum(a) - getSum(b)));
+
             if (node.getChildren().size() == 1) {
                 LeafNode ret = new LeafNode(node);
                 ret.setValue(sum);
@@ -64,7 +64,7 @@ public class DataProcess {
                 ret.setColname(node.colname);
                 return ret;
             }
-
+            node.getChildren().sort((a,b) -> (int) (getSum(a) - getSum(b)));
             // arrange the childNode from the largest one that is smaller than the
             long subSum = 0;
             LinkedList copyChildren2 = new LinkedList<>();
@@ -73,7 +73,7 @@ public class DataProcess {
                 if (nodeSum.containsKey(child)) {
                     temp = nodeSum.get(child);
                 } else {
-                    temp = getSum(node);
+                    temp = getSum(child);
                     nodeSum.put(child, temp);
                 }
                 if (temp < minValue) {
