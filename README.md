@@ -12,9 +12,9 @@ Spring Boot, Javascript, HTML, CSS, D3.js
 ## Start the project
 
 #### 1.Download the whole project into a local PC. 
-#### 2.Import the project as a Java project into a IDE (IntelliJ or Eclipse, etc).
+#### 2.Import the project as a Maven project into a IDE (IntelliJ or Eclipse, etc).
 #### 3.Find the application at the src/main/java/com/example/demo/DemoApplication.java.
-#### 4.Build the project and run the code by Running the  DemoApplication.java.
+#### 4.Build the project and run the code by Running the  DemoApplication.java. If there is anything wrong when building the project, use Maven reimport the pom.xml file at the root folder.  
 #### 5. Wait until the springBoot is builted, then open the browser with the site " http://localhost:8000/home " and play the tools.
 
 (If you have the trouble building the project, please emailto hgeng7@wisc.edu)
