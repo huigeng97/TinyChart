@@ -1,12 +1,14 @@
 # Tiny Treemap
 
-## Requirement
+## Tools Needed to build and Run
 
 Java version 1.8+;
 
-## Libraries
+## List of Tools and Libraries we use
+#### Java(Spring Boot) to connect frontend and backend
+#### HTML, CSS, JavaScript to build the website
+#### D3.js to build the Treemap 
 
-Spring Boot, Javascript, HTML, CSS, D3.js
 
 
 ## Start the project
@@ -18,6 +20,11 @@ Spring Boot, Javascript, HTML, CSS, D3.js
 #### 5. Wait until the springBoot is builted, then open the browser with the site " http://localhost:8000/home " and play the tools.
 
 (If you have the trouble building the project, please emailto hgeng7@wisc.edu)
+
+## How to Use:
+#### User can click the data source box to choose the data source
+#### User can scroll the bar to choose the treemap size 
+#### User can customize the area threshold to combine the square(when to combine squares)
 
 ## Try your own data
 
