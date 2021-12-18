@@ -1,4 +1,4 @@
-# TinyChart
+# Tiny Treemap
 
 ## Requirement
 
