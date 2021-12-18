@@ -19,7 +19,7 @@ Java version 1.8+;
 #### 1. Learn the data format from the src/main/java/com/example/demo/data2.json 
 ####        or https://www.d3-graph-gallery.com/graph/treemap_json.html
         The imformation field is the children, name, and value.
-#### 2. Create your own data and store at src/main/java/com/example/demo with a name data5.json
+#### 2. Create your own data and store at src/main/java/com/example/demo and name it as data5.json
 #### 3. Choose the data as data5 in the home page and then visualize it.
 
 ## Ongoing 
