@@ -4,6 +4,13 @@
 
 Java version 1.8+;
 
+## Libraries
+
+Spring Boot 
+Javascript, Html, CSS
+D3.js
+
+
 ## Start the project
 
 #### 1.Download the whole project into a local PC. 
